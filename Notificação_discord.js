@@ -3,6 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Envia notificações para o Discord através de um webhook.
+// @icon         https://i.imgur.com/7WgHTT8.gif
 // @author       Marcus7170 --> Discord devmarcus7170
 // @match        https://*.tribalwars.com.br/*
 // @grant        none
