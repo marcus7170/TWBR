@@ -29,6 +29,7 @@
     });
 
     let lastNotificationTime = 0; // Variável para armazenar o horário da última notificação enviada
+    let lastNotificationTitle = ""; // Variável para armazenar o título da última notificação enviada
 
     // Função para enviar a notificação para o Discord via webhook
     function enviarNotificacaoParaDiscord(titulo, mensagem, urlImagem, urlNotificacao, jogador, coordenadaAldeia, horarioNotificacao) {
@@ -61,6 +62,7 @@
         });
 
         lastNotificationTime = Date.now(); // Atualiza o horário da última notificação enviada
+        lastNotificationTitle = titulo; // Atualiza o título da última notificação enviada
     }
 
     // Observa se há novas notificações na página
@@ -80,8 +82,8 @@
                     const aldeia = TribalWars.getGameData().village; // Obter dados da aldeia
                     const coordenadaAldeia = `(${aldeia.x}|${aldeia.y})`;
                     const horarioNotificacao = new Date().toLocaleString(); // Obter o horário atual
-
-                    if (!titulo.startsWith("Progresso da realização") && Date.now() - lastNotificationTime >= 1000) {
+                    // Caso queira ignorar alguma notificação, escreva o titulo dela em !titulo.startsWith(" ")
+                    if (!titulo.startsWith("AAAA") && titulo !== lastNotificationTitle && Date.now() - lastNotificationTime >= 5000) { 
                         enviarNotificacaoParaDiscord(titulo, mensagem, urlImagem, urlNotificacao, jogador, coordenadaAldeia, horarioNotificacao);
                     }
                 }
@@ -90,3 +92,4 @@
     }).observe(document.getElementById('side-notification-container'), { childList: true });
 
 })();
+
