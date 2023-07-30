@@ -28,6 +28,8 @@
         }
     });
 
+    let lastNotificationTime = 0; // Variável para armazenar o horário da última notificação enviada
+
     // Função para enviar a notificação para o Discord via webhook
     function enviarNotificacaoParaDiscord(titulo, mensagem, urlImagem, urlNotificacao, jogador, coordenadaAldeia, horarioNotificacao) {
         const payload = JSON.stringify({
@@ -40,7 +42,7 @@
                     },
                     "url": urlNotificacao,
                     "footer": {
-                        "text": `Notificação na conta: ${jogador.name} - Coordenada da Aldeia: ${coordenadaAldeia} - Horário: ${horarioNotificacao}`
+                        "text": `Conta: ${jogador.name} - Aldeia onde aba esta aberta: ${coordenadaAldeia} - Horário: ${horarioNotificacao}`
                     }
                 }
             ]
@@ -57,6 +59,8 @@
         }).catch(error => {
             console.error("Erro ao enviar notificação para o Discord:", error);
         });
+
+        lastNotificationTime = Date.now(); // Atualiza o horário da última notificação enviada
     }
 
     // Observa se há novas notificações na página
@@ -77,7 +81,7 @@
                     const coordenadaAldeia = `(${aldeia.x}|${aldeia.y})`;
                     const horarioNotificacao = new Date().toLocaleString(); // Obter o horário atual
 
-                    if (!titulo.startsWith("Progresso da realização")) {
+                    if (!titulo.startsWith("Progresso da realização") && Date.now() - lastNotificationTime >= 1000) {
                         enviarNotificacaoParaDiscord(titulo, mensagem, urlImagem, urlNotificacao, jogador, coordenadaAldeia, horarioNotificacao);
                     }
                 }
