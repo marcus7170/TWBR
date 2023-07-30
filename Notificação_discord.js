@@ -29,7 +29,7 @@
     });
 
     let lastNotificationTime = 0; // Variável para armazenar o horário da última notificação enviada
-    let lastNotificationTitle = ""; // Variável para armazenar o título da última notificação enviada
+    const sentNotifications = {}; // Objeto para armazenar os títulos das notificações enviadas e os horários
 
     // Função para enviar a notificação para o Discord via webhook
     function enviarNotificacaoParaDiscord(titulo, mensagem, urlImagem, urlNotificacao, jogador, coordenadaAldeia, horarioNotificacao) {
@@ -62,7 +62,7 @@
         });
 
         lastNotificationTime = Date.now(); // Atualiza o horário da última notificação enviada
-        lastNotificationTitle = titulo; // Atualiza o título da última notificação enviada
+        sentNotifications[titulo] = lastNotificationTime; // Armazena o título e o horário da notificação enviada
     }
 
     // Observa se há novas notificações na página
@@ -83,7 +83,7 @@
                     const coordenadaAldeia = `(${aldeia.x}|${aldeia.y})`;
                     const horarioNotificacao = new Date().toLocaleString(); // Obter o horário atual
                     // Caso queira ignorar alguma notificação, escreva o titulo dela em !titulo.startsWith(" ")
-                    if (!titulo.startsWith("AAAA") && titulo !== lastNotificationTitle && Date.now() - lastNotificationTime >= 5000) { 
+                    if (!titulo.startsWith("AAAA") && (!sentNotifications[titulo] || Date.now() - sentNotifications[titulo] >= 2000)) {
                         enviarNotificacaoParaDiscord(titulo, mensagem, urlImagem, urlNotificacao, jogador, coordenadaAldeia, horarioNotificacao);
                     }
                 }
@@ -92,4 +92,3 @@
     }).observe(document.getElementById('side-notification-container'), { childList: true });
 
 })();
-
